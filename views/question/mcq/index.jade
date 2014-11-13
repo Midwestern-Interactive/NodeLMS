@@ -1,0 +1,16 @@
+extend ../../layout
+
+block body
+  p questions
+  for mcq in mcqs
+    div(class="panel panel-default")
+      .panel-heading
+        h4 #{mcq.text}
+      .panel-body
+        .btn-group-vertical(role="group")
+          for ans in mcq.answers
+            button(class="btn btn-default") #{ans.text}
+
+//  ul#mcq
+//    +mcq("Book A", 12.99)
+//    +book("Book B", 5.99)
