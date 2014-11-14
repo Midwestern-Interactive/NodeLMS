@@ -1,19 +1,23 @@
 extend ../../layout
 
+title MCQ Create
+
 block body
-  .container
-    h3 New MCQ
-      .container
-        textarea.form-control#question(type="text" placeholder="question text...")
+  h3 New MCQ
 
-        br
-        .row
-          each val in [0,1,2,3]
-            .input-group
-              span.input-group-addon
-                input(id='chkb#{val}' type="checkbox")
-              input.form-control(id='ans#{val}' type="text" placeholder="answer text...")
+  div(class="panel panel-default")
+    .panel-heading
+      textarea.form-control#question(type="text" placeholder="question text...")
+    .panel-body
+      each val in [0,1,2,3]
+        .col-lg-6
+          .input-group
+            span.input-group-addon
+              input(id='chkb#{val}' type="checkbox")
+            input.form-control(id='ans#{val}' type="text" placeholder="answer text...")
+          br
 
+    .col-lg-6
       button(type="button" id="create" class="btn btn-primary")
         | Create
   script(src="/js/question/mcq/create.js")

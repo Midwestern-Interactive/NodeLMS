@@ -1,15 +1,19 @@
 extend ../../layout
 
+title MCQ
+
 block body
-  p questions
-  for mcq in mcqs
-    div(class="panel panel-default")
-      .panel-heading
-        h4 #{mcq.text}
-      .panel-body
-        .btn-group-vertical(role="group")
-          for ans in mcq.answers
-            button(class="btn btn-default") #{ans.text}
+  
+  h3 MCQ Test Questions
+  .highlight
+    h5 #{req.session.mcq.text}
+  div(class="panel panel-default")
+    .btn-group-vertical(data-toggle="buttons")
+      each ans, index in req.session.mcq.answers
+        label(class="btn btn-primary")
+          input(type="radio" name="options" id="option#{index}")
+          | #{ans.text}
+
 
 //  ul#mcq
 //    +mcq("Book A", 12.99)

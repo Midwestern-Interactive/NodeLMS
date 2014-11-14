@@ -11,64 +11,75 @@ module.exports = {
 		},
 
 		/*
-		 * This is just showing all of the questions in
-		 * the database.
-		 *
-		 * It should ideally fetch only questions tagged
-		 * correctly. (i.e tagged as quiz 1)
-		 */
+		* This is just showing all of the questions in
+		* the database.
+		*
+		* It should ideally fetch only questions tagged
+		* correctly. (i.e tagged as quiz 1)
+		*
+		*/
 		index: function (req, res){
-			Mcq.find().populate('answers').exec(function (err, obj){
+			Mcq.find({limit: 10}).populate('answers').exec(function (err, obj){
 				//Check for errors...
 				if(err) return res.view(500, "Error: " + err)
+				var rand = Math.floor(Math.random()*obj.length)
 
-				console.log('MCQ: \n' + obj)
+				req.session.mcq = obj[rand]
+				console.log(rand)
 				//Send ALL mcq objects to the mcq view
-				return res.view({mcqs: obj})
+				return res.view()
 			});
 		},
 
 		/*
-		* Create an MCQ object
+		* Check if an mcq was answered correctly
+		*
+		*/
+		check: function(req, res){
+			var ques
+		},
+
+		/*
+		* Create an MCQ object in the db
 		*/
 		create: function (req, res){
-			console.log('Creating MCQ...')
 			var correct = req.param('correct')
 			var wrong = req.param('wrong')
-			var i = 0
+			var l = 0
+			console.log(correct)
+			console.log(wrong)
 
-			//Add answers to DB
-			var addAnswers = function (err, ques){
-				console.log('Question Created')
+			if(correct!=undefined && wrong!=undefined){
+				//Add answers to DB
+				var addAnswers = function (err, ques){
 
-				//Add correct answers to DB
-				for(var i in correct){
-					console.log('Adding correct answer: ' + correct[i])
-					McqAnswer.create({text: correct[i], mark: 1, question: ques.id}).exec(function (err, ans){
-						if(err) return res.send(500, err)
+					//Add correct answers to DB
+					for(var i in correct){
+						McqAnswer.create({text: correct[i], mark: 1, question: ques.id}).exec(function (err, ans){
+							if(err) return res.send(500, err)
 
-						console.log('Correct Answer Created')
-						ques.answers.add(ans.id)
-						ques.save()
-						if( i++ === correct.length+wrong.length) return res.view({mcqs: [ques]})
-					})
+							ques.answers.add(ans.id)
+							ques.save()
+							if( l++ == correct.length+wrong.length) return res.redirect('/question/mcq')
+						})
+					}
+
+					//Add incorrect answers
+					for(var i in wrong){
+						McqAnswer.create({text: wrong[i], mark: 0, question: ques.id}).exec(function (err, ans){
+							if(err) return res.send(500, err)
+
+							ques.answers.add(ans.id)
+							ques.save()
+							if( l++ == correct.length+wrong.length) return res.redirect('/question/mcq')
+						})
+					}
 				}
-
-				//Add incorrect answers
-				for(var i in wrong){
-					console.log('Adding wrong answer: ' + wrong[i])
-					McqAnswer.create({text: wrong[i], mark: 0, question: ques.id}).exec(function (err, ans){
-						if(err) return res.send(500, err)
-
-						console.log('Wrong Answer Created')
-						ques.answers.add(ans.id)
-						ques.save()
-						if( i++ === correct.length+wrong.length) return res.view({mcqs: [ques]})
-					})
-				}
-			}
 
 			Mcq.create({text: req.param('question')}).exec(addAnswers)
-
+		}else {
+			console.log("Error");
+			return res.send(500, "Not correct")
 		}
+	}
 };

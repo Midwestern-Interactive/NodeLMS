@@ -19,7 +19,7 @@ html
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href="#")= username
+          a.navbar-brand(href="#") Gary
 
         #navbar(class="collapse navbar-collapse")
           ul(class="nav navbar-nav")
@@ -29,10 +29,12 @@ html
               a(href="/question/mcq") MCQ
             li.active
               a(href="/question/mcq/create") Create MCQ
+
     //.page-header
       h1
         | GeeGee
         small  education
+
     ol.breadcrumb
       li
         a(href="/")
@@ -43,13 +45,10 @@ html
       li
         a(href="#") MCQ
 
-    .jumbotron
-      h1 GeeGee
-      p
-        | Next Generation LMS written for use in African schools
+    block nav
 
     .container
         block body
 
-  footer
+  //footer
     | GG - Written by Gary Krige

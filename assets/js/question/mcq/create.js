@@ -1,9 +1,9 @@
-$('#create').on('click', function(){
+$('#create').click(function(){
   //Parameters to be sent to MCQ Model
   var ques = $('#question').val()
   var corr = []
   var wro = []
-
+  $()
   //Loop through the checkbuttons
   $('input[id*=chkb]').each(function(index, element){
       //Add to Correct/Wrong list
@@ -13,7 +13,7 @@ $('#create').on('click', function(){
         wro.push($('#ans' + index).val())
   });
 
-  //Send JSON
+  //Send JSONsas
   $.post('/question/mcq/create',
     {question: ques,
     correct: corr,
