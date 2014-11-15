@@ -2,4 +2,13 @@
 
 a [Sails](http://sailsjs.org) application
 
-Written by Gary Krige
+## Install
+## git
+'''
+sudo aptget install git
+'''
+### Ubuntu
+'''
+git clone https://github.com/garykrige/NodeLMS.git
+sudo apt-get install nodejs
+'''
